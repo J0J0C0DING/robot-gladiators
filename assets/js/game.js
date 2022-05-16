@@ -7,6 +7,12 @@ var enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
 var enemyHealth = 50;
 var enemyAttack = 12;
 
+let randomNumber = function (min, max) {
+  let value = Math.floor(Math.random() * (max - min + 1) + min);
+
+  return value;
+};
+
 let fight = function (enemyName) {
   // Alert players that they are starting the round
   while (playerHealth > 0 && enemyHealth > 0) {
@@ -21,13 +27,15 @@ let fight = function (enemyName) {
       if (confirmSkip) {
         alert(`${playerName} has chosen to skip the fight!`);
         //subtract money from playerMoney for skipping
-        playerMoney = playerMoney - 10;
+        playerMoney = Math.max(0, playerMoney - 10);
         console.log("playerMoney", playerMoney);
         break;
       }
     }
     //Subtract  `playerAttack` from  `enemyHealth` and update `enemyHealth` variable
-    enemyHealth = enemyHealth - playerAttack;
+    let damage = randomNumber(playerAttack - 3, playerAttack);
+    enemyHealth = Math.max(0, enemyHealth - damage);
+
     console.log(`${playerName} attacked ${enemyName}. ${enemyName} now has ${enemyHealth} health remaining `);
     // Check enemy's health
     if (enemyHealth <= 0) {
@@ -39,7 +47,8 @@ let fight = function (enemyName) {
       alert(`${enemyName} still has ${enemyHealth} health left.`);
     }
     // Subtract `enemyAttack` from  `playerHealth` and  update `playerHealth` variable.
-    playerHealth = playerHealth - enemyAttack;
+    damage = randomNumber(enemyAttack - 3, enemyAttack);
+    playerHealth = Math.max(0, playerHealth - damage);
     // Log a resulting message to the console so we know that it worked.
     console.log(`${enemyName} attacked ${playerName}. ${playerName} now has ${playerHealth} health remaining.`);
     // Check player's health
@@ -63,7 +72,7 @@ var startGame = function () {
 
       var pickedEnemyName = enemyNames[i];
 
-      enemyHealth = 50;
+      enemyHealth = randomNumber(40, 60);
 
       fight(pickedEnemyName);
 
